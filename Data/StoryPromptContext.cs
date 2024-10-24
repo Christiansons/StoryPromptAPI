@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using StoryPromptAPI.Models.Entitites;
+using StoryPromptAPI.Models.Entities;
 
 namespace StoryPromptAPI.Data
 {

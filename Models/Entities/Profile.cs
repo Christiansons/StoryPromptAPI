@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StoryPromptAPI.Models.Entitites
+namespace StoryPromptAPI.Models.Entities
 {
     public class Profile
     {

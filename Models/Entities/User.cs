@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StoryPromptAPI.Models.Entitites
+namespace StoryPromptAPI.Models.Entities
 {
     public class User : IdentityUser
     {
