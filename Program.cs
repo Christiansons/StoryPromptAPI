@@ -1,4 +1,9 @@
 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using StoryPromptAPI.Data;
+using StoryPromptAPI.Models.Entitites;
+
 namespace StoryPromptAPI
 {
     public class Program
@@ -13,6 +18,15 @@ namespace StoryPromptAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<StoryPromptContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
+            });
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<StoryPromptContext>()
+                .AddDefaultTokenProviders();
 
             var app = builder.Build();
 
