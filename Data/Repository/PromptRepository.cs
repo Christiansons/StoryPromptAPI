@@ -2,6 +2,7 @@
 using StoryPromptAPI.Data.Repository.IRepository;
 using StoryPromptAPI.Models.Entities;
 
+
 namespace StoryPromptAPI.Data.Repository
 {
     public class PromptRepository :IPromptRepository
