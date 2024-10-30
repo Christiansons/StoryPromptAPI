@@ -1,6 +1,6 @@
 ﻿namespace StoryPromptAPI.Data.Repository
 {
-    public class PromoptReactionRepository
+    public class StoryRepository
     {
     }
 }

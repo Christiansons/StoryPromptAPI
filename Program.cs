@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data;
+using StoryPromptAPI.Data.Repository;
+using StoryPromptAPI.Data.Repository.IRepository;
 using StoryPromptAPI.Models.Entities;
 
 namespace StoryPromptAPI
@@ -18,6 +20,14 @@ namespace StoryPromptAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IPromptReactionRepository, PromptReactionRepository>();
+            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            //builder.Services.AddScoped<IStoryReactionRepository, StoryReactionRepository>();
+            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
+            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
+            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
+            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
 
             builder.Services.AddDbContext<StoryPromptContext>(options =>
             {
