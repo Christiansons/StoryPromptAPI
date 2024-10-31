@@ -1,13 +1,15 @@
-﻿using StoryPromptAPI.Models.Entities;
+﻿using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository.IRepository
 {
     public interface IPromptReactionRepository
     {
-        Task AddPromptReactionAsync(PromptReactions promptReactions);
-        Task<IEnumerable<PromptReactions>> GetAllPromptReactionsAsync(); //Read all 
-        Task<PromptReactions> GetPromptReactionByIdAsync(int promptReactionsId); // Read by ID
-        Task UpdatePromptReactionAsync(PromptReactions promptReactions); // Update a prompt reaction
-        Task DeletePromptReactionAsync(int promptReactionsId); // Delete a prompt reaction
+        Task<IEnumerable<PromptReactions>> GetAllReactionsByPromptIdAsync(int promptId);
+        Task<IEnumerable<PromptReactions>> GetAllReactionsByUserIdAsync(string userId);
+        Task AddReactionAsync(PromptReactions reaction);
+        Task UpdateReactionAsync(PromptReactions reaction);
+        Task DeleteReactionAsync(int id);
+        Task<PromptReactions> GetReactionByIdAsync(int id);
+        Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId);
     }
 }
