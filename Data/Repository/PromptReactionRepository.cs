@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository
 {
@@ -12,44 +12,54 @@ namespace StoryPromptAPI.Data.Repository
             _context = context;
         }
 
-        public async Task AddPromptReactionAsync(PromptReactions promptReactions)
+        public async Task AddReactionAsync(PromptReactions reaction)
         {
-            await _context.PromptsReactions.AddAsync(promptReactions);
-            await SaveChanges();
+            await _context.PromptsReactions.AddAsync(reaction);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task DeletePromptReactionAsync(int promptReactionsId)
+        public async Task DeleteReactionAsync(int id)
         {
-            var promptReaction = await _context.PromptsReactions.FindAsync(promptReactionsId);
-            if(promptReaction == null)
+            var reaction = await _context.PromptsReactions.FindAsync(id);
+            if (reaction != null)
             {
-                return;
+                _context.PromptsReactions.Remove(reaction);
+                await _context.SaveChangesAsync();
             }
-
-            _context.PromptsReactions.Remove(promptReaction);
-            await SaveChanges();
         }
 
-        public async Task<IEnumerable<PromptReactions>> GetAllPromptReactionsAsync()
+        public async Task<IEnumerable<PromptReactions>> GetAllReactionsByPromptIdAsync(int promptId)
         {
-            var prompts = await _context.PromptsReactions.ToListAsync();
-            return prompts;
+            return await _context.PromptsReactions
+                                  .Where(pr => pr.PromptId == promptId)
+                                  .ToListAsync();
         }
 
-        public async Task<PromptReactions> GetPromptReactionByIdAsync(int promptReactionsId)
+        public async Task<IEnumerable<PromptReactions>> GetAllReactionsByUserIdAsync(string userId)
         {
-            var promptReaction = await _context.PromptsReactions.FindAsync(promptReactionsId);
-            return promptReaction;
+            return await _context.PromptsReactions
+                                 .Where(pr => pr.UserId == userId)
+                                 .ToListAsync();
         }
 
-        public async Task UpdatePromptReactionAsync(PromptReactions promptReactions)
+        public async Task<PromptReactions> GetReactionByIdAsync(int id)
         {
-            _context.PromptsReactions.Update(promptReactions);
-            await SaveChanges(); 
+            var reaction = await _context.PromptsReactions.FindAsync(id);
+            return reaction;
         }
 
-        public async Task SaveChanges()
+        public async Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId)
         {
+            var reaction = await _context.PromptsReactions
+                                  .FirstOrDefaultAsync(pr => pr.PromptId == promptId && pr.UserId == userId);
+
+            return reaction;
+
+        }
+
+        public async Task UpdateReactionAsync(PromptReactions reaction)
+        {
+            _context.PromptsReactions.Update(reaction);
             await _context.SaveChangesAsync();
         }
     }

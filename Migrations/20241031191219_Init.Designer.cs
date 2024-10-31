@@ -12,8 +12,8 @@ using StoryPromptAPI.Data;
 namespace StoryPromptAPI.Migrations
 {
     [DbContext(typeof(StoryPromptContext))]
-    [Migration("20241024144214_init")]
-    partial class init
+    [Migration("20241031191219_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,144 +158,149 @@ namespace StoryPromptAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Profile", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Profile", b =>
                 {
-                    b.Property<int>("ProfileId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfileId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ProfileCreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ProfileDescription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfilePictureUrl")
+                    b.Property<string>("Picture")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ProfileId");
+                    b.Property<DateOnly>("ProfileCreated")
+                        .HasColumnType("date");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Prompt", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Prompt", b =>
                 {
-                    b.Property<int>("PromptId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromptId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("PromptContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PromptCreatedDate")
+                    b.Property<DateTime>("PromptDateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserIdFK")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PromptId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserIdFK");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Prompts");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.PromptReactions", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.PromptReactions", b =>
                 {
-                    b.Property<int>("PromptReactionsId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromptReactionsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PromptIdFK")
+                    b.Property<int>("PromptId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PromptReaction")
+                    b.Property<string>("Reaction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserIdFK")
-                        .IsRequired()
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("PromptReactionsId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PromptIdFK");
+                    b.HasIndex("PromptId");
 
-                    b.HasIndex("UserIdFK");
+                    b.HasIndex("UserId");
 
                     b.ToTable("PromptsReactions");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Story", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Story", b =>
                 {
-                    b.Property<int>("StoryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("PromptIdFK")
+                    b.Property<int>("PromptId")
                         .HasColumnType("int");
 
                     b.Property<string>("StoryContent")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StoryCreatedDate")
+                    b.Property<DateTime>("StoryDateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserIdFK")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("StoryId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("PromptIdFK");
+                    b.HasIndex("PromptId");
 
-                    b.HasIndex("UserIdFK");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Stories");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.StoryReactions", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.StoryReactions", b =>
                 {
-                    b.Property<int>("StoryReactionsId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StoryReactionsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("StoryIdFK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StoryReaction")
+                    b.Property<string>("Reaction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserIdFK")
-                        .IsRequired()
+                    b.Property<int>("StoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("StoryReactionsId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("StoryIdFK");
+                    b.HasIndex("StoryId");
 
-                    b.HasIndex("UserIdFK");
+                    b.HasIndex("UserId");
 
                     b.ToTable("StoriesReactions");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.User", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -337,9 +342,6 @@ namespace StoryPromptAPI.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProfileIdFK")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -360,8 +362,6 @@ namespace StoryPromptAPI.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("ProfileIdFK");
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -376,7 +376,7 @@ namespace StoryPromptAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", null)
+                    b.HasOne("StoryPromptAPI.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -385,7 +385,7 @@ namespace StoryPromptAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", null)
+                    b.HasOne("StoryPromptAPI.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -400,7 +400,7 @@ namespace StoryPromptAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", null)
+                    b.HasOne("StoryPromptAPI.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -409,36 +409,65 @@ namespace StoryPromptAPI.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", null)
+                    b.HasOne("StoryPromptAPI.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Prompt", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Profile", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", "User")
-                        .WithMany("Prompts")
-                        .HasForeignKey("UserIdFK")
+                    b.HasOne("StoryPromptAPI.Models.User", "User")
+                        .WithOne("Profile")
+                        .HasForeignKey("StoryPromptAPI.Models.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.PromptReactions", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Prompt", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.Prompt", "Prompt")
-                        .WithMany("PromptReactions")
-                        .HasForeignKey("PromptIdFK")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("StoryPromptAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", "User")
-                        .WithMany("PromptReactions")
-                        .HasForeignKey("UserIdFK")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("StoryPromptAPI.Models.PromptReactions", b =>
+                {
+                    b.HasOne("StoryPromptAPI.Models.Prompt", "Prompt")
+                        .WithMany("PromptsReactions")
+                        .HasForeignKey("PromptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StoryPromptAPI.Models.User", "User")
+                        .WithMany("PromptsReactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Prompt");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("StoryPromptAPI.Models.Story", b =>
+                {
+                    b.HasOne("StoryPromptAPI.Models.Prompt", "Prompt")
+                        .WithMany("Stories")
+                        .HasForeignKey("PromptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StoryPromptAPI.Models.User", "User")
+                        .WithMany("Stories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Prompt");
@@ -446,76 +475,46 @@ namespace StoryPromptAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Story", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.StoryReactions", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.Prompt", "Prompt")
-                        .WithMany("Stories")
-                        .HasForeignKey("PromptIdFK")
-                        .OnDelete(DeleteBehavior.NoAction)
+                    b.HasOne("StoryPromptAPI.Models.Story", "Story")
+                        .WithMany("StoriesReactions")
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", "User")
-                        .WithMany("Stories")
-                        .HasForeignKey("UserIdFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Prompt");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.StoryReactions", b =>
-                {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.Story", "Story")
-                        .WithMany("StoryReactions")
-                        .HasForeignKey("StoryIdFK")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("StoryPromptAPI.Models.Entitites.User", "User")
-                        .WithMany("StoryReactions")
-                        .HasForeignKey("UserIdFK")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.HasOne("StoryPromptAPI.Models.User", "User")
+                        .WithMany("StoriesReactions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Story");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.User", b =>
+            modelBuilder.Entity("StoryPromptAPI.Models.Prompt", b =>
                 {
-                    b.HasOne("StoryPromptAPI.Models.Entitites.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileIdFK")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("PromptsReactions");
+
+                    b.Navigation("Stories");
+                });
+
+            modelBuilder.Entity("StoryPromptAPI.Models.Story", b =>
+                {
+                    b.Navigation("StoriesReactions");
+                });
+
+            modelBuilder.Entity("StoryPromptAPI.Models.User", b =>
+                {
+                    b.Navigation("Profile")
                         .IsRequired();
 
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Prompt", b =>
-                {
-                    b.Navigation("PromptReactions");
-
-                    b.Navigation("Stories");
-                });
-
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.Story", b =>
-                {
-                    b.Navigation("StoryReactions");
-                });
-
-            modelBuilder.Entity("StoryPromptAPI.Models.Entitites.User", b =>
-                {
-                    b.Navigation("PromptReactions");
-
-                    b.Navigation("Prompts");
+                    b.Navigation("PromptsReactions");
 
                     b.Navigation("Stories");
 
-                    b.Navigation("StoryReactions");
+                    b.Navigation("StoriesReactions");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository
 {
@@ -12,43 +12,53 @@ namespace StoryPromptAPI.Data.Repository
             _context = context;
         }
 
-        public async Task AddStoryReactionAsync(StoryReactions storyReactions)
+        public async Task AddReactionAsync(StoryReactions reaction)
         {
-            await _context.StoriesReactions.AddAsync(storyReactions);
-            await SaveChanges();
+            await _context.StoriesReactions.AddAsync(reaction);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteStoryReactionAsync(int storyReactionsId)
+        public async Task DeleteReactionAsync(int id)
         {
-            var storyReaction = await _context.StoriesReactions.FindAsync(storyReactionsId);
-            if(storyReaction == null)
+            var reaction = await _context.StoriesReactions.FindAsync(id);
+            if (reaction != null)
             {
-                return;
+                _context.StoriesReactions.Remove(reaction);
+                await _context.SaveChangesAsync();
             }
-            _context.StoriesReactions.Remove(storyReaction);
-            await SaveChanges();
         }
 
-        public async Task<IEnumerable<StoryReactions>> GetAllStoryReactionsAsync()
+        public async Task<IEnumerable<StoryReactions>> GetAllReactionsByStoryIdAsync(int storyId)
         {
-            var storyReactions = await _context.StoriesReactions.ToListAsync();
-            return storyReactions;
+            return await _context.StoriesReactions
+                                  .Where(sr => sr.StoryId == storyId)
+                                  .ToListAsync();
         }
 
-        public async Task<StoryReactions> GetStoryReactionByIdAsync(int storyReactionsId)
+        public async Task<IEnumerable<StoryReactions>> GetAllReactionsByUserIdAsync(string userId)
         {
-            var storyReaction = await _context.StoriesReactions.FindAsync(storyReactionsId);
-            return storyReaction;
+            return await _context.StoriesReactions
+                                .Where(sr => sr.UserId == userId)
+                                .ToListAsync();
         }
 
-        public async Task UpdateStoryReactionAsync(StoryReactions storyReactions)
+        public async Task<StoryReactions> GetReactionByIdAsync(int id)
         {
-            _context.StoriesReactions.Update(storyReactions);
-            await SaveChanges();
+            var reaction = await _context.StoriesReactions.FindAsync(id);
+            return reaction;
         }
 
-        public async Task SaveChanges()
+        public async Task<StoryReactions> GetReactionByStoryAndUserAsync(int storyId, string userId)
         {
+            var reaction = await _context.StoriesReactions
+                                .FirstOrDefaultAsync(sr => sr.StoryId == storyId && sr.UserId == userId);
+
+            return reaction;
+        }
+
+        public async Task UpdateReactionAsync(StoryReactions reaction)
+        {
+            _context.StoriesReactions.Update(reaction);
             await _context.SaveChangesAsync();
         }
     }

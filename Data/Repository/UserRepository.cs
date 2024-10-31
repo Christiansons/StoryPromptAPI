@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository
 {
@@ -15,40 +15,42 @@ namespace StoryPromptAPI.Data.Repository
         public async Task AddUserAsync(User user)
         {
             await _context.Users.AddAsync(user);
-            await SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUserAsync(string userId)
+        public async Task DeleteUserAsync(string id)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if(user == null)
+            var user = await _context.Users.Include(u => u.Stories)
+                 .Include(u => u.PromptsReactions)
+                 .Include(u => u.StoriesReactions)
+                 .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user != null)
             {
-                return;
+                _context.Stories.RemoveRange(user.Stories);
+                _context.PromptsReactions.RemoveRange(user.PromptsReactions);
+                _context.StoriesReactions.RemoveRange(user.StoriesReactions);
+
+                // Remove the user
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
             }
-             _context.Remove(user);
-            await SaveChanges();
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            var users = await _context.Users.ToListAsync();  
-            return users;
+            return await _context.Users.ToListAsync();
         }
 
-        public async Task<User> GetUsrByIdAsync(string userId)
+        public async Task<User> GetUserByIdAsync(string id)
         {
-            var user = await _context.Users.FindAsync(userId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
             return user;
         }
 
         public async Task UpdateUserAsync(User user)
         {
             _context.Users.Update(user);
-            await SaveChanges();
-        }
-
-        public async Task SaveChanges()
-        {
             await _context.SaveChangesAsync();
         }
     }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data
 {
@@ -12,54 +12,57 @@ namespace StoryPromptAPI.Data
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<Prompt> Prompts { get; set; }
-        public DbSet<User> AllUsers { get; set; }
         public DbSet<PromptReactions> PromptsReactions { get; set; }
         public DbSet<StoryReactions> StoriesReactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
 
 
-            //----------------- Disable deletebehavior for promptreactions ----------------
             modelBuilder.Entity<PromptReactions>()
-                .HasOne(pr => pr.Prompt)  // Assuming a navigation property to Prompts
-                .WithMany(p => p.PromptReactions)  // Assuming Prompts has a collection of PromptsReactions
-                .HasForeignKey(pr => pr.PromptIdFK)
-                .OnDelete(DeleteBehavior.NoAction);  // Prevent cascading delete
+         .HasOne(pr => pr.Prompt)
+         .WithMany(p => p.PromptsReactions)
+         .HasForeignKey(pr => pr.PromptId)
+         .OnDelete(DeleteBehavior.Restrict);  // Prevent multiple cascade paths
 
-            // Configuring the relationship between PromptsReactions and another entity, e.g., User or Reaction
+            // Configure one-to-many relationship between Users and PromptReaction with Cascade
             modelBuilder.Entity<PromptReactions>()
-                .HasOne(pr => pr.User)  // Assuming a navigation property to User or another entity
-                .WithMany(u => u.PromptReactions)  // Assuming User or Reaction has a collection of PromptsReactions
-                .HasForeignKey(pr => pr.UserIdFK)
-                .OnDelete(DeleteBehavior.NoAction);  // Prevent cascading delete
+                .HasOne(pr => pr.User)
+                .WithMany(u => u.PromptsReactions)
+                .HasForeignKey(pr => pr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete when a user is deleted
 
-
-
-            //--------------- Disable deletebehavior for storyreactions -----------------
+            // Configure one-to-many relationship between Story and StoryReaction with Restrict (to avoid multiple cascade paths)
             modelBuilder.Entity<StoryReactions>()
-                .HasOne(pr => pr.Story)  // Assuming a navigation property to Prompts
-                .WithMany(p => p.StoryReactions)  // Assuming Prompts has a collection of PromptsReactions
-                .HasForeignKey(pr => pr.StoryIdFK)
-                .OnDelete(DeleteBehavior.NoAction);  // Prevent cascading delete
+                .HasOne(sr => sr.Story)
+                .WithMany(s => s.StoriesReactions)
+                .HasForeignKey(sr => sr.StoryId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent multiple cascade paths
 
-            // Configuring the relationship between PromptsReactions and another entity, e.g., User or Reaction
+            // Configure one-to-many relationship between Users and StoryReaction with Cascade
             modelBuilder.Entity<StoryReactions>()
-                .HasOne(pr => pr.User)  // Assuming a navigation property to User or another entity
-                .WithMany(u => u.StoryReactions)  // Assuming User or Reaction has a collection of PromptsReactions
-                .HasForeignKey(pr => pr.UserIdFK)
-                .OnDelete(DeleteBehavior.NoAction);  // Prevent cascading delete
+                .HasOne(sr => sr.User)
+                .WithMany(u => u.StoriesReactions)
+                .HasForeignKey(sr => sr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);  // Cascade delete when a user is deleted
 
-
-
-
-            // ------------ Disable deletebehavior for stories -------------
+            // Configure one-to-many relationship between Stories and Prompts with Restrict (to avoid multiple cascade paths)
             modelBuilder.Entity<Story>()
-                .HasOne(st => st.Prompt)  // Assuming a navigation property to Prompts
-                .WithMany(st => st.Stories)  // Assuming Prompts has a collection of PromptsReactions
-                .HasForeignKey(st => st.PromptIdFK)
-                .OnDelete(DeleteBehavior.NoAction);  // Prevent cascading delete
+                .HasOne(s => s.Prompt)
+                .WithMany(p => p.Stories)
+                .HasForeignKey(s => s.PromptId)
+                .OnDelete(DeleteBehavior.Restrict);  // Prevent multiple cascade paths
+
+            // Configure one-to-many relationship between Users and Stories with Cascade
+            modelBuilder.Entity<Story>()
+                .HasOne(s => s.User)
+                .WithMany(u => u.Stories)
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
         }
     }
     
