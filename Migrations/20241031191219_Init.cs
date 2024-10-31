@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StoryPromptAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,18 +26,28 @@ namespace StoryPromptAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Profiles",
+                name: "AspNetUsers",
                 columns: table => new
                 {
-                    ProfileId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfilePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfileDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProfileCreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Profiles", x => x.ProfileId);
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,38 +68,6 @@ namespace StoryPromptAPI.Migrations
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProfileIdFK = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Profiles_ProfileIdFK",
-                        column: x => x.ProfileIdFK,
-                        principalTable: "Profiles",
-                        principalColumn: "ProfileId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -179,21 +157,43 @@ namespace StoryPromptAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Prompts",
+                name: "Profiles",
                 columns: table => new
                 {
-                    PromptId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PromptContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PromptCreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserIdFK = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Picture = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfileCreated = table.Column<DateOnly>(type: "date", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Prompts", x => x.PromptId);
+                    table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Prompts_AspNetUsers_UserIdFK",
-                        column: x => x.UserIdFK,
+                        name: "FK_Profiles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Prompts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PromptContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromptDateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Prompts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Prompts_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -203,77 +203,82 @@ namespace StoryPromptAPI.Migrations
                 name: "PromptsReactions",
                 columns: table => new
                 {
-                    PromptReactionsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PromptReaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PromptIdFK = table.Column<int>(type: "int", nullable: false),
-                    UserIdFK = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Reaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromptId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PromptsReactions", x => x.PromptReactionsId);
+                    table.PrimaryKey("PK_PromptsReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PromptsReactions_AspNetUsers_UserIdFK",
-                        column: x => x.UserIdFK,
+                        name: "FK_PromptsReactions_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PromptsReactions_Prompts_PromptIdFK",
-                        column: x => x.PromptIdFK,
+                        name: "FK_PromptsReactions_Prompts_PromptId",
+                        column: x => x.PromptId,
                         principalTable: "Prompts",
-                        principalColumn: "PromptId");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Stories",
                 columns: table => new
                 {
-                    StoryId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StoryContent = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StoryCreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserIdFK = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PromptIdFK = table.Column<int>(type: "int", nullable: false)
+                    StoryDateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PromptId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stories", x => x.StoryId);
+                    table.PrimaryKey("PK_Stories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Stories_AspNetUsers_UserIdFK",
-                        column: x => x.UserIdFK,
+                        name: "FK_Stories_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Stories_Prompts_PromptIdFK",
-                        column: x => x.PromptIdFK,
+                        name: "FK_Stories_Prompts_PromptId",
+                        column: x => x.PromptId,
                         principalTable: "Prompts",
-                        principalColumn: "PromptId");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "StoriesReactions",
                 columns: table => new
                 {
-                    StoryReactionsId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StoryReaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StoryIdFK = table.Column<int>(type: "int", nullable: false),
-                    UserIdFK = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Reaction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StoryId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StoriesReactions", x => x.StoryReactionsId);
+                    table.PrimaryKey("PK_StoriesReactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StoriesReactions_AspNetUsers_UserIdFK",
-                        column: x => x.UserIdFK,
+                        name: "FK_StoriesReactions_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StoriesReactions_Stories_StoryIdFK",
-                        column: x => x.StoryIdFK,
+                        name: "FK_StoriesReactions_Stories_StoryId",
+                        column: x => x.StoryId,
                         principalTable: "Stories",
-                        principalColumn: "StoryId");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -309,11 +314,6 @@ namespace StoryPromptAPI.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ProfileIdFK",
-                table: "AspNetUsers",
-                column: "ProfileIdFK");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -321,39 +321,45 @@ namespace StoryPromptAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Prompts_UserIdFK",
+                name: "IX_Profiles_UserId",
+                table: "Profiles",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Prompts_UserId",
                 table: "Prompts",
-                column: "UserIdFK");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromptsReactions_PromptIdFK",
+                name: "IX_PromptsReactions_PromptId",
                 table: "PromptsReactions",
-                column: "PromptIdFK");
+                column: "PromptId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PromptsReactions_UserIdFK",
+                name: "IX_PromptsReactions_UserId",
                 table: "PromptsReactions",
-                column: "UserIdFK");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stories_PromptIdFK",
+                name: "IX_Stories_PromptId",
                 table: "Stories",
-                column: "PromptIdFK");
+                column: "PromptId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Stories_UserIdFK",
+                name: "IX_Stories_UserId",
                 table: "Stories",
-                column: "UserIdFK");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoriesReactions_StoryIdFK",
+                name: "IX_StoriesReactions_StoryId",
                 table: "StoriesReactions",
-                column: "StoryIdFK");
+                column: "StoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoriesReactions_UserIdFK",
+                name: "IX_StoriesReactions_UserId",
                 table: "StoriesReactions",
-                column: "UserIdFK");
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -375,6 +381,9 @@ namespace StoryPromptAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Profiles");
+
+            migrationBuilder.DropTable(
                 name: "PromptsReactions");
 
             migrationBuilder.DropTable(
@@ -391,9 +400,6 @@ namespace StoryPromptAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Profiles");
         }
     }
 }
