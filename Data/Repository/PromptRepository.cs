@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
-
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository
 {
@@ -16,41 +15,37 @@ namespace StoryPromptAPI.Data.Repository
         public async Task AddPromptAsync(Prompt prompt)
         {
             await _context.Prompts.AddAsync(prompt);
-            await SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public async Task DeletePromptAsync(int promptId)
+        public async Task DeletePromptAsync(int id)
         {
-            var prompt = await _context.Prompts.FindAsync(promptId);
-            if (prompt == null)
+            var prompt = await _context.Prompts.Include(p => p.PromptsReactions)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (prompt != null)
             {
-                return;
+                _context.PromptsReactions.RemoveRange(prompt.PromptsReactions);
+                _context.Prompts.Remove(prompt);
+                await _context.SaveChangesAsync();
+
             }
-
-            _context.Prompts.Remove(prompt);
-            await SaveChanges();
         }
 
-        public async Task<IEnumerable<Prompt>> GetAllPromptAsync()
+        public async Task<IEnumerable<Prompt>> GetAllPromptsASync()
         {
-            var prompts = await _context.Prompts.ToListAsync();
-            return prompts;
+            return await _context.Prompts.ToListAsync();
         }
 
-        public async Task<Prompt> GetPromptByIdAsync(int promptId)
+        public async Task<Prompt> GetPromptByIdASync(int id)
         {
-            var prompt = await _context.Prompts.FindAsync(promptId);
+            var prompt = await _context.Prompts.FirstOrDefaultAsync(x => x.Id == id);
+
             return prompt;
         }
 
         public async Task UpdatePromptAsync(Prompt prompt)
         {
             _context.Prompts.Update(prompt);
-            await SaveChanges();
-        }
-
-        public async Task SaveChanges()
-        {
             await _context.SaveChangesAsync();
         }
     }

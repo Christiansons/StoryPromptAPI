@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
 
 namespace StoryPromptAPI.Data.Repository
 {
@@ -18,36 +18,25 @@ namespace StoryPromptAPI.Data.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Profile>> GetAllProfilesAsync()
+        public async Task DeleteProfileAsync(int id)
         {
-            var profileList = await _context.Profiles.ToListAsync();
-            return profileList;
+            var profile = await _context.Profiles.FindAsync(id);
+            if (profile != null)
+            {
+                _context.Profiles.Remove(profile);
+                await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task<Profile> GetProfileByIdAsync(int profileId)
+        public async Task<Profile> GetProfileByUserIdAsync(string userId)
         {
-            var profile = await _context.Profiles.FindAsync(profileId);
-            return profile;
+            var user = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            return user;
         }
 
         public async Task UpdateProfileAsync(Profile profile)
         {
             _context.Profiles.Update(profile);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteProfileAsync(int profileId)
-        {
-            var profile = await _context.Profiles.FindAsync(profileId);
-            if (profile != null)
-            {
-                _context.Profiles.Remove(profile);
-            }
-            else
-            {
-                return;
-            }
-
             await _context.SaveChangesAsync();
         }
     }

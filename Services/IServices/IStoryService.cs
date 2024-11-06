@@ -1,6 +1,13 @@
-﻿namespace StoryPromptAPI.Services.IServices
+﻿using StoryPromptAPI.Models.DTOs.Story;
+
+namespace StoryPromptAPI.Services.IServices
 {
     public interface IStoryService
     {
+        Task<IEnumerable<StoryDTO>> GetAllStoriesAsync();
+        Task<StoryDTO> GetStoryByIdAsync(int id);
+        Task<StoryDTO> AddStoryAsync(CreateStoryDTO createStoryDto);
+        Task UpdateStoryAsync(UpdateStoryDTO updateStoryDto);
+        Task DeleteStoryAsync(int id);
     }
 }

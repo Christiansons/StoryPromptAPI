@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Data;
 using StoryPromptAPI.Data.Repository;
 using StoryPromptAPI.Data.Repository.IRepository;
-using StoryPromptAPI.Models.Entities;
+using StoryPromptAPI.Models;
+using StoryPromptAPI.Services.IServices;
+using StoryPromptAPI.Services;
 
 namespace StoryPromptAPI
 {
@@ -14,21 +16,6 @@ namespace StoryPromptAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddScoped<IPromptReactionRepository, PromptReactionRepository>();
-            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-            //builder.Services.AddScoped<IStoryReactionRepository, StoryReactionRepository>();
-            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
-            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
-            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
-            //builder.Services.AddScoped<IPromptReactionRepository, IPromptReactionRepository>();
-
             builder.Services.AddDbContext<StoryPromptContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
@@ -37,6 +24,28 @@ namespace StoryPromptAPI
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<StoryPromptContext>()
                 .AddDefaultTokenProviders();
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            builder.Services.AddScoped<IPromptRepository, PromptRepository>();
+            builder.Services.AddScoped<IStoryRepository, StoryRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<IPromptReactionRepository, PromptReactionRepository>();
+            builder.Services.AddScoped<IStoryReactionRepository, StoryReactionRepository>();
+
+            builder.Services.AddScoped<IPromptService, PromptService>();
+            builder.Services.AddScoped<IStoryService, StoryService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<IPromptReactionService, PromptReactionService>();
+            builder.Services.AddScoped<IStoryReactionService, StoryReactionService>();
+
+
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
