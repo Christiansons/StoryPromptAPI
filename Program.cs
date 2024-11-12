@@ -7,6 +7,9 @@ using StoryPromptAPI.Data.Repository.IRepository;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Services.IServices;
 using StoryPromptAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace StoryPromptAPI
 {
@@ -25,9 +28,35 @@ namespace StoryPromptAPI
                 .AddEntityFrameworkStores<StoryPromptContext>()
                 .AddDefaultTokenProviders();
 
+            var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
+            builder.Services.Configure<JwtSettings>(jwtSettingsSection);
+
+            
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                    };
+                });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
+            
             builder.Services.AddScoped<IPromptRepository, PromptRepository>();
             builder.Services.AddScoped<IStoryRepository, StoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -41,7 +70,7 @@ namespace StoryPromptAPI
             builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<IPromptReactionService, PromptReactionService>();
             builder.Services.AddScoped<IStoryReactionService, StoryReactionService>();
-
+            builder.Services.AddAuthorization();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -57,7 +86,7 @@ namespace StoryPromptAPI
             }
 
             app.UseHttpsRedirection();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
