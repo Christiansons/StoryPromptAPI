@@ -21,7 +21,7 @@ namespace StoryPromptAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProfiles()
         {
-            var profiles = await _profileService.GetAllProfilesAsync();
+            var profiles = await _profileService.GetAllProfiles();
             return Ok(profiles);
         }
 
