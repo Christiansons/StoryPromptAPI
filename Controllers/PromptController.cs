@@ -75,5 +75,34 @@ namespace StoryPromptAPI.Controllers
             await _promptService.DeletePromptAsync(id);
             return NoContent();
         }
-    }
+
+        [HttpGet("top")]
+        public async Task<ActionResult<IEnumerable<PromptDTO>>> GetTopPrompts()
+        {
+            try
+            {
+                IEnumerable<PromptDTO> topPrompts = await _promptService.GetTopPromptsAsync();
+                return Ok(topPrompts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpGet("new")]
+        public async Task<ActionResult<IEnumerable<PromptDTO>>> GetNewPrompts()
+        {
+            try
+            {
+                IEnumerable<PromptDTO> newPrompts = await _promptService.GetNewPromptsAsync();
+                return Ok(newPrompts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+			
+		}
+	}
 }
