@@ -1,6 +1,7 @@
 ﻿using StoryPromptAPI.Data.Repository.IRepository;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Models.DTOs.Prompt;
+using StoryPromptAPI.Models.DTOs.PromptReactions;
 using StoryPromptAPI.Models.DTOs.User;
 using StoryPromptAPI.Services.IServices;
 

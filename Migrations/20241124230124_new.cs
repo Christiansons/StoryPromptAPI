@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace StoryPromptAPI.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:Migrations/20241124230124_new.cs
     public partial class @new : Migration
+========
+    public partial class init : Migration
+>>>>>>>> 9093ee7613e865e31b6959db2e139b4955aa2734:Migrations/20241120132306_init.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

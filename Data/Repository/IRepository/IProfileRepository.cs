@@ -8,5 +8,6 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task AddProfileAsync(Profile profile);
         Task UpdateProfileAsync(Profile profile);
         Task DeleteProfileAsync(int id);
+        Task<IEnumerable<Profile>> GetAllProfiles();
     }
 }

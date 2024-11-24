@@ -33,7 +33,7 @@ namespace StoryPromptAPI.Data.Repository
 
         public async Task<IEnumerable<Prompt>> GetAllPromptsASync()
         {
-            return await _context.Prompts.ToListAsync();
+            return await _context.Prompts.Include(p => p.PromptsReactions).Include(p => p.User).ToListAsync();
         }
 
         public async Task<Prompt> GetPromptByIdASync(int id)

@@ -12,8 +12,13 @@ using StoryPromptAPI.Data;
 namespace StoryPromptAPI.Migrations
 {
     [DbContext(typeof(StoryPromptContext))]
+<<<<<<<< HEAD:Migrations/20241124230124_new.Designer.cs
     [Migration("20241124230124_new")]
     partial class @new
+========
+    [Migration("20241120132306_init")]
+    partial class init
+>>>>>>>> 9093ee7613e865e31b6959db2e139b4955aa2734:Migrations/20241120132306_init.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
