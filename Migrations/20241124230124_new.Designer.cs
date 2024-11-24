@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StoryPromptAPI.Data;
 
@@ -11,9 +12,11 @@ using StoryPromptAPI.Data;
 namespace StoryPromptAPI.Migrations
 {
     [DbContext(typeof(StoryPromptContext))]
-    partial class StoryPromptContextModelSnapshot : ModelSnapshot
+    [Migration("20241124230124_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
