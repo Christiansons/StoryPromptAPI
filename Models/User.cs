@@ -10,8 +10,9 @@ namespace StoryPromptAPI.Models
 
         public ICollection<Story> Stories { get; set; }
 
-        public ICollection<PromptReactions> PromptsReactions { get; set; }
+        public ICollection<Prompt> Prompts { get; set; }
 
+        public ICollection<PromptReactions> PromptsReactions { get; set; }
 
         public ICollection<StoryReactions> StoriesReactions { get; set; }
 

@@ -427,7 +427,7 @@ namespace StoryPromptAPI.Migrations
             modelBuilder.Entity("StoryPromptAPI.Models.Prompt", b =>
                 {
                     b.HasOne("StoryPromptAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Prompts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -506,6 +506,8 @@ namespace StoryPromptAPI.Migrations
                 {
                     b.Navigation("Profile")
                         .IsRequired();
+
+                    b.Navigation("Prompts");
 
                     b.Navigation("PromptsReactions");
 

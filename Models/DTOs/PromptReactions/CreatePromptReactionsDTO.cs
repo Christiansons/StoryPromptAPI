@@ -3,7 +3,6 @@
 
 {
     public class CreatePromptReactionsDTO
-
     {
         public string Reaction { get; set; }
         public int PromptId { get; set; }
