@@ -2,6 +2,8 @@
 using StoryPromptAPI.Models.DTOs.Story;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Services.IServices;
+using StoryPromptAPI.Models.DTOs.Prompt;
+using StoryPromptAPI.Models.DTOs.User;
 
 namespace StoryPromptAPI.Services
 {
@@ -56,6 +58,27 @@ namespace StoryPromptAPI.Services
                 });
             }
             return storyDTOs;
+        }
+
+        public async Task<IEnumerable<StoryByPromptDTO>> GetAllStoriesForPromptAsync()
+        {
+            var allStories = await _storyRepository.GetAllStoriesAsync();
+
+            var storiesForPrompt = allStories.Select(s => new StoryByPromptDTO
+            {
+                StoryContent = s.StoryContent,
+                StoryDateCreated = s.StoryDateCreated,
+                ReactionCount = s.StoriesReactions.Where(p => p.Reaction == "Like").Count() - s.StoriesReactions.Where(s => s.Reaction == "Dislike").Count(),
+                Id = s.Id,
+                user = new UserDTO
+                {
+                    Email = s.User.Email,
+                    Id = s.UserId,
+                    UserName = s.User.UserName,
+                },
+            });
+            
+            return storiesForPrompt;
         }
 
         public async Task<StoryDTO> GetStoryByIdAsync(int id)

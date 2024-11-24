@@ -57,6 +57,8 @@ namespace StoryPromptAPI.Services
             };
         }
 
+  
+
         public async Task UpdateProfileAsync(UpdateProfileDTO updateProfileDto)
         {
             var profile = await _profileRepository.GetProfileByUserIdAsync(updateProfileDto.UserId);
