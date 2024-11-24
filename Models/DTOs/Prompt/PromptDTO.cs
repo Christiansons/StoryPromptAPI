@@ -1,4 +1,6 @@
-﻿namespace StoryPromptAPI.Models.DTOs.Prompt
+﻿using StoryPromptAPI.Models.DTOs.User;
+
+namespace StoryPromptAPI.Models.DTOs.Prompt
 
 {
     public class PromptDTO
@@ -6,5 +8,8 @@
         public int Id { get; set; }
         public string PromptContent { get; set; }
         public DateTime PromptDateCreated { get; set; }
+        public UserDTO user { get; set; }
+        public int ReactionCount { get; set; }
+        public int StoryCount   { get; set; }
     }
 }
