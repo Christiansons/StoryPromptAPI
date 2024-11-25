@@ -33,12 +33,20 @@ namespace StoryPromptAPI.Data.Repository
 
         public async Task<IEnumerable<Prompt>> GetAllPromptsASync()
         {
-            return await _context.Prompts.ToListAsync();
+            return await _context.Prompts
+                .Include(p => p.PromptsReactions)
+                .Include(p => p.User)
+                .Include(p => p.Stories)
+                .ToListAsync();
         }
 
         public async Task<Prompt> GetPromptByIdASync(int id)
         {
-            var prompt = await _context.Prompts.FirstOrDefaultAsync(x => x.Id == id);
+            var prompt = await _context.Prompts
+                .Include(p => p.PromptsReactions)
+                .Include(p => p.User)
+                .Include(p => p.Stories)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return prompt;
         }
