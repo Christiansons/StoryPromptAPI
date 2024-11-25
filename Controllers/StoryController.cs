@@ -27,9 +27,8 @@ namespace StoryPromptAPI.Controllers
 		[HttpGet("all/{promptId}")]
 		public async Task<IActionResult> GetAllStoriesByPromptId(int promptId)
 		{
-			var stories = await _storyService.GetAllStoriesAsync();
-            var storiesForPrompt = stories.Where(s => s.PromptId == promptId).ToList();
-			return Ok(storiesForPrompt);
+			var stories = await _storyService.GetAllStoriesForPromptAsync(promptId);
+			return Ok(stories);
 		}
 
 		// GET: api/story/{id}

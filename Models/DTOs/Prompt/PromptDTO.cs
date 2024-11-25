@@ -1,4 +1,6 @@
-﻿using StoryPromptAPI.Models.DTOs.PromptReactions;
+﻿using StoryPromptAPI.Models.DTOs.User;
+
+using StoryPromptAPI.Models.DTOs.PromptReactions;
 using StoryPromptAPI.Models.DTOs.User;
 
 namespace StoryPromptAPI.Models.DTOs.Prompt
@@ -11,5 +13,6 @@ namespace StoryPromptAPI.Models.DTOs.Prompt
         public DateTime PromptDateCreated { get; set; }
         public UserDTO user { get; set; }
         public int ReactionCount { get; set; }
+        public int StoryCount   { get; set; }
     }
 }
