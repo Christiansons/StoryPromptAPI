@@ -77,25 +77,19 @@ namespace StoryPromptAPI.Controllers
         }
 
         [HttpGet("top")]
-        public async Task<ActionResult<IEnumerable<PromptDTO>>> GetTopPrompts()
+        public async Task<IActionResult> GetTopPrompts()
         {
-            try
-            {
-                IEnumerable<PromptDTO> topPrompts = await _promptService.GetTopPromptsAsync();
-                return Ok(topPrompts);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var topPrompts = await _promptService.GetTopPromptsAsync();
+            return Ok(topPrompts);
+
         }
 
         [HttpGet("new")]
-        public async Task<ActionResult<IEnumerable<PromptDTO>>> GetNewPrompts()
+        public async Task<IActionResult> GetNewPrompts()
         {
             try
             {
-                IEnumerable<PromptDTO> newPrompts = await _promptService.GetNewPromptsAsync();
+                var newPrompts = await _promptService.GetNewPromptsAsync();
                 return Ok(newPrompts);
             }
             catch (Exception ex)

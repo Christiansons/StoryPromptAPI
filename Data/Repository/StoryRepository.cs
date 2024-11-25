@@ -32,7 +32,11 @@ namespace StoryPromptAPI.Data.Repository
 
         public async Task<IEnumerable<Story>> GetAllStoriesAsync()
         {
-            return await _context.Stories.Include(s => s.User).Include(s => s.Prompt).ToListAsync();
+            return await _context.Stories
+                .Include(s => s.User)
+                .Include(s => s.Prompt)
+                .Include(s => s.StoriesReactions)
+                .ToListAsync();
         }
 
         public async Task<Story> GetStoryByIdAsync(int id)

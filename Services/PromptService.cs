@@ -69,39 +69,22 @@ namespace StoryPromptAPI.Services
             var allPrompts = await _promptRepository.GetAllPromptsASync();
             var newPrompts = allPrompts.Select(p => new PromptDTO
             {
+                Id = p.Id,
                 PromptContent = p.PromptContent,
                 PromptDateCreated= p.PromptDateCreated,
-                Id = p.Id,
-                ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
                 user = new UserDTO
                 {
                     Email = p.User.Email,
                     Id = p.UserId,
                     UserName = p.User.UserName
                 },
+                ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
                 StoryCount = p.Stories.Count()
             }).OrderBy(Dto => Dto.PromptDateCreated)
             .ToList();
 
             return newPrompts;
 		}
-
-		public async Task<PromptDTO> GetPromptByIdAsync(int id)
-        {
-            var prompt = await _promptRepository.GetPromptByIdASync(id);
-            if (prompt == null)
-            {
-                return null; // or throw an exception
-            }
-
-            // Manually map from Prompt entity to PromptDTO
-            return new PromptDTO
-            {
-                Id = prompt.Id,
-                PromptContent = prompt.PromptContent,
-                PromptDateCreated = prompt.PromptDateCreated
-            };
-        }
 
         //get prompts ordered by like-count
 		public async Task<IEnumerable<PromptDTO>> GetTopPromptsAsync()
@@ -126,7 +109,24 @@ namespace StoryPromptAPI.Services
 			return topPrompts;
 		}
 
-		public async Task UpdatePromptAsync(UpdatePromptDTO updatePromptDto)
+        public async Task<PromptDTO> GetPromptByIdAsync(int id)
+        {
+            var prompt = await _promptRepository.GetPromptByIdASync(id);
+            if (prompt == null)
+            {
+                return null; // or throw an exception
+            }
+
+            // Manually map from Prompt entity to PromptDTO
+            return new PromptDTO
+            {
+                Id = prompt.Id,
+                PromptContent = prompt.PromptContent,
+                PromptDateCreated = prompt.PromptDateCreated
+            };
+        }
+
+        public async Task UpdatePromptAsync(UpdatePromptDTO updatePromptDto)
         {
             var prompt = await _promptRepository.GetPromptByIdASync(updatePromptDto.Id);
             if (prompt == null)
