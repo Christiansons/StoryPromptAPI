@@ -14,6 +14,8 @@ namespace StoryPromptAPI.Services
         {
             _promptRepository = promptRepository;
         }
+
+
         public async Task<PromptDTO> AddPromptAsync(CreatePromptDTO createPromptDto)
         {
             var prompt = new Prompt
