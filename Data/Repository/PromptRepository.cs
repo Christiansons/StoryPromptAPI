@@ -51,14 +51,6 @@ namespace StoryPromptAPI.Data.Repository
             return prompt;
         }
 
-        public async Task<List<Prompt>> GetPromptsByUserIdAsync(string userId)
-        {
-            return await _context.Prompts
-         .Where(p => p.UserId == userId)
-         .OrderByDescending(p => p.PromptDateCreated)
-         .ToListAsync();
-        }
-
         public async Task UpdatePromptAsync(Prompt prompt)
         {
             _context.Prompts.Update(prompt);

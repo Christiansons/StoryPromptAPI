@@ -13,5 +13,8 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId);
         
 
+=======
+        Task<bool> CheckExisitingUpvote(PromptReactions reaction);
+>>>>>>> parent of a369e5b (Merge branch 'master' into Alex)
     }
 }

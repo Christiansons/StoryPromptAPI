@@ -15,7 +15,6 @@ namespace StoryPromptAPI
 {
     public class Program
     {
-        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -28,17 +27,6 @@ namespace StoryPromptAPI
                 .AddEntityFrameworkStores<StoryPromptContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigin", builder =>
-                {
-                    builder.WithOrigins("https://localhost:7073") // Replace with MVC app URLs
-                           .AllowAnyHeader()
-                           .AllowAnyMethod()
-                           .AllowCredentials(); // Needed for cookie-based authentication
-                });
-            });
-
             var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
             builder.Services.Configure<JwtSettings>(jwtSettingsSection);
 
@@ -48,7 +36,6 @@ namespace StoryPromptAPI
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
                 .AddJwtBearer(options =>
                 {
@@ -64,7 +51,6 @@ namespace StoryPromptAPI
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
                     };
                 });
-            builder.Services.AddAuthorization();
 
             builder.Services.AddCors(options =>
             {
@@ -100,11 +86,6 @@ namespace StoryPromptAPI
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                await CreateRoles(services); // Call the CreateRoles method here
-            }
 
             app.UseCors("AllowAll");
 
@@ -115,7 +96,6 @@ namespace StoryPromptAPI
            
 
             app.UseHttpsRedirection();
-            app.UseCors("AllowSpecificOrigin");
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -123,20 +103,6 @@ namespace StoryPromptAPI
             app.MapControllers();
 
             app.Run();
-        }
-        private static async Task CreateRoles(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            string[] roleNames = { "Admin", "User" };
-            foreach (var roleName in roleNames)
-            {
-                var roleExists = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExists)
-                {
-                    await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
         }
     }
 }

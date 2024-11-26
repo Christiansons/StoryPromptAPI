@@ -12,6 +12,5 @@ namespace StoryPromptAPI.Data.Repository.IRepository
 
         Task UpdatePromptAsync(Prompt prompt);
         Task DeletePromptAsync(int id);
-        Task<List<Prompt>> GetPromptsByUserIdAsync(string userId);
     }
 }
