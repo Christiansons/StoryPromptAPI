@@ -81,7 +81,8 @@ namespace StoryPromptAPI.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.UserName)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
                 Issuer = _jwtSettings.Issuer,
