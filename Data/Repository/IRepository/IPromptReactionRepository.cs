@@ -12,5 +12,6 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task<PromptReactions> GetReactionByIdAsync(int id);
         Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId);
         Task<bool> CheckExisitingUpvote(PromptReactions reaction);
+
     }
 }

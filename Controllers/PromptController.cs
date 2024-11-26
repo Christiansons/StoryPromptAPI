@@ -23,6 +23,13 @@ namespace StoryPromptAPI.Controllers
             return Ok(prompts);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetPromptsByUser(string userId)
+        {
+            var prompts = await _promptService.GetPromptsByUserIdAsync(userId);
+            return Ok(prompts);
+        }
+
         // GET: api/prompt/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPromptById(int id)

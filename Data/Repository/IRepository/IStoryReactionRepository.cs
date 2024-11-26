@@ -11,5 +11,7 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task DeleteReactionAsync(int id);
         Task<StoryReactions> GetReactionByIdAsync(int id);
         Task<StoryReactions> GetReactionByStoryAndUserAsync(int storyId, string userId);
+        
+
     }
 }
