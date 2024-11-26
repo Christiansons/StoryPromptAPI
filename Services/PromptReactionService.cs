@@ -21,6 +21,20 @@ namespace StoryPromptAPI.Services
                 UserId = createPromptReactionDto.UserId
             };
 
+            var exisitingVote = await _promptReactionRepository.CheckExisitingUpvote(reaction);
+            if (exisitingVote == true)
+            {
+                await _promptReactionRepository.DeleteReactionAsync(reaction);
+            }
+
+            //var existingOppositeVote = await _promptReactionRepository.CheckOppositeVote(reaction);
+            //if (existingOppositeVote == true)
+            //{
+            //    reaction.Reaction = createPromptReactionDto.Reaction ""
+            //    await _promptReactionRepository.DeleteReactionAsync(reaction);
+            //}
+
+
             await _promptReactionRepository.AddReactionAsync(reaction);
 
             return new PromptReactionsDTO
@@ -32,9 +46,9 @@ namespace StoryPromptAPI.Services
             };
         }
 
-        public async Task DeleteReactionAsync(int id)
+        public async Task DeleteReactionAsync(PromptReactions reaction)
         {
-            await _promptReactionRepository.DeleteReactionAsync(id);
+            await _promptReactionRepository.DeleteReactionAsync(reaction);
         }
 
         public async Task<IEnumerable<PromptReactionsDTO>> GetAllReactionsByPromptIdAsync(int promptId)
