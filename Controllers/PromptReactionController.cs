@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StoryPromptAPI.Models;
 using StoryPromptAPI.Models.DTOs.PromptReactions;
 using StoryPromptAPI.Services.IServices;
 
@@ -65,9 +66,9 @@ namespace StoryPromptAPI.Controllers
 
         // DELETE: api/promptreaction/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReaction(int id)
+        public async Task<IActionResult> DeleteReaction(PromptReactions reaction)
         {
-            await _promptReactionService.DeleteReactionAsync(id);
+            await _promptReactionService.DeleteReactionAsync(reaction);
             return NoContent();
         }
     }

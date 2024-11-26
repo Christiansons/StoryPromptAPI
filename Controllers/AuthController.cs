@@ -24,22 +24,16 @@ namespace StoryPromptAPI.Controllers
         private readonly JwtSettings _jwtSettings;
         private readonly IProfileRepository _profileRepository;
 
-<<<<<<< HEAD
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<JwtSettings> jwtSettings)
-=======
 
         public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<JwtSettings> jwtSettings, IProfileRepository profileRepository)
->>>>>>> parent of 8c23729 (rt)
+
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtSettings = jwtSettings.Value;
-<<<<<<< HEAD
-            
-=======
+
             _profileRepository = profileRepository;
 
->>>>>>> parent of 8c23729 (rt)
         }
 
         [HttpPost("Register")]
@@ -91,18 +85,14 @@ namespace StoryPromptAPI.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
-<<<<<<< HEAD
-            var token = GenerateJwtToken(user);
-=======
             var token = await GenerateJwtToken(user);
->>>>>>> parent of 8c23729 (rt)
+
 
             return Ok(new { token });
         }
 
-<<<<<<< HEAD
-        private string GenerateJwtToken(User user)
-=======
+
+
         [HttpPost("PromoteToAdmin/{userId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PromoteToAdmin(string userId)
@@ -125,7 +115,7 @@ namespace StoryPromptAPI.Controllers
 
 
         private async Task<string> GenerateJwtToken(User user)
->>>>>>> parent of 8c23729 (rt)
+
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
@@ -150,20 +140,8 @@ namespace StoryPromptAPI.Controllers
             // Define the token descriptor
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-<<<<<<< HEAD
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.UserName)
-                }),
-=======
-
                 Subject = new ClaimsIdentity(claims),
 
-              
-
->>>>>>> parent of 8c23729 (rt)
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
                 Issuer = _jwtSettings.Issuer,
                 Audience = _jwtSettings.Audience,

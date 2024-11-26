@@ -11,8 +11,7 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task DeleteReactionAsync(int id);
         Task<PromptReactions> GetReactionByIdAsync(int id);
         Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId);
-<<<<<<< HEAD
-        
+       
 
         Task<bool> CheckExisitingUpvote(PromptReactions reaction);
     }
