@@ -32,9 +32,9 @@ namespace StoryPromptAPI.Services
             };
         }
 
-        public async Task DeleteReactionAsync(int id)
+        public async Task DeleteReactionAsync(PromptReactions reaction)
         {
-            await _promptReactionRepository.DeleteReactionAsync(id);
+            await _promptReactionRepository.DeleteReactionAsync(reaction);
         }
 
         public async Task<IEnumerable<PromptReactionsDTO>> GetAllReactionsByPromptIdAsync(int promptId)

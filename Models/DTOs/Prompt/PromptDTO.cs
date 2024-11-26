@@ -1,8 +1,5 @@
 ﻿using StoryPromptAPI.Models.DTOs.User;
 
-using StoryPromptAPI.Models.DTOs.PromptReactions;
-using StoryPromptAPI.Models.DTOs.User;
-
 namespace StoryPromptAPI.Models.DTOs.Prompt
 
 {

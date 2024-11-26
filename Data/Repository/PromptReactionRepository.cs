@@ -18,10 +18,15 @@ namespace StoryPromptAPI.Data.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteReactionAsync(int id)
+        public Task<bool> CheckExisitingUpvote(PromptReactions reaction)
         {
-            var reaction = await _context.PromptsReactions.FindAsync(id);
-            if (reaction != null)
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteReactionAsync(PromptReactions reaction)
+        {
+            var foundReaction = await _context.PromptsReactions.FindAsync(reaction);
+            if (foundReaction != null)
             {
                 _context.PromptsReactions.Remove(reaction);
                 await _context.SaveChangesAsync();

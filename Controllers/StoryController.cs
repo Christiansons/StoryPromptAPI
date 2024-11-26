@@ -83,19 +83,6 @@ namespace StoryPromptAPI.Controllers
         }
 
 
-        [HttpGet("prompt/{promptId}")]
-        public async Task<IActionResult> GetStoriesForPrompt(int promptId)
-        {
-            var stories = await _storyService.GetStoriesByPromptIdAsync(promptId);
-
-            if (!stories.Any())
-            {
-                return NotFound("No stories found for the specified prompt.");
-            }
-
-            return Ok(stories);
-        }
-
         //[HttpGet("prompt/{promptId}")]
         //public async Task<IActionResult> GetStoriesForPrompt(int promptId)
         //{

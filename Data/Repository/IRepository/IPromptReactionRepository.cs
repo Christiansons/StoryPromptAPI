@@ -8,7 +8,7 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task<IEnumerable<PromptReactions>> GetAllReactionsByUserIdAsync(string userId);
         Task AddReactionAsync(PromptReactions reaction);
         Task UpdateReactionAsync(PromptReactions reaction);
-        Task DeleteReactionAsync(int id);
+        Task DeleteReactionAsync(PromptReactions reaction);
         Task<PromptReactions> GetReactionByIdAsync(int id);
         Task<PromptReactions> GetReactionByPromptAndUserAsync(int promptId, string userId);
        
