@@ -82,6 +82,7 @@ namespace StoryPromptAPI.Controllers
             return NoContent();
         }
 
+<<<<<<< HEAD
         [HttpGet("prompt/{promptId}")]
         public async Task<IActionResult> GetStoriesForPrompt(int promptId)
         {
@@ -94,6 +95,20 @@ namespace StoryPromptAPI.Controllers
 
             return Ok(stories);
         }
+=======
+        //[HttpGet("prompt/{promptId}")]
+        //public async Task<IActionResult> GetStoriesForPrompt(int promptId)
+        //{
+        //    var stories = await _storyService.GetStoriesByPromptIdAsync(promptId);
+
+        //    if (!stories.Any())
+        //    {
+        //        return NotFound("No stories found for the specified prompt.");
+        //    }
+
+        //    return Ok(stories);
+        //}
+>>>>>>> cf60dbc10ffaae67fed1ecad669a7b112cbc9815
 
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetStoriesByUser(string userId)
@@ -101,5 +116,9 @@ namespace StoryPromptAPI.Controllers
             var stories = await _storyService.GetStoriesByUserIdAsync(userId);
             return Ok(stories);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> cf60dbc10ffaae67fed1ecad669a7b112cbc9815
     }
 }
