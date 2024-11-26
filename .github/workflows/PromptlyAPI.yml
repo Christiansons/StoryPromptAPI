@@ -1,10 +1,10 @@
-name: Build and deploy .NET Core application to Web App Promptly
+name: Build and deploy .NET Core application to Web App PromptlyAPI
 on:
   push:
     branches:
     - Alex
 env:
-  AZURE_WEBAPP_NAME: Promptly
+  AZURE_WEBAPP_NAME: PromptlyAPI
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.Promptly_313E }}
+        publish-profile: ${{ secrets.PromptlyAPI_02AF }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
