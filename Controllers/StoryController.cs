@@ -101,5 +101,6 @@ namespace StoryPromptAPI.Controllers
             var stories = await _storyService.GetStoriesByUserIdAsync(userId);
             return Ok(stories);
         }
+
     }
 }

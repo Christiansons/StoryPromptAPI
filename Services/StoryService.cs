@@ -60,9 +60,6 @@ namespace StoryPromptAPI.Services
             return storyDTOs;
         }
 
-
-       
-
         public async Task<IEnumerable<StoryByPromptDTO>> GetAllStoriesForPromptAsync(int promptId)
         {
             var allStories = await _storyRepository.GetAllStoriesAsync();
@@ -84,7 +81,6 @@ namespace StoryPromptAPI.Services
             }).ToList();
             
             return storiesForPrompt;
-
         }
 
         public async Task<StoryDTO> GetStoryByIdAsync(int id)
@@ -115,21 +111,6 @@ namespace StoryPromptAPI.Services
 
             story.StoryContent = updateStoryDto.StoryContent;
             await _storyRepository.UpdateStoryAsync(story);
-        }
-
-
-
-        public async Task<List<StoryDTO>> GetStoriesByUserIdAsync(string userId)
-        {
-            var stories = await _storyRepository.GetStoriesByUserIdAsync(userId);
-            return stories.Select(s => new StoryDTO
-            {
-                Id = s.Id,
-                StoryContent = s.StoryContent,
-                StoryDateCreated = s.StoryDateCreated,
-                PromptId = s.PromptId,
-                UserId = s.UserId
-            }).ToList();
         }
     }
 }

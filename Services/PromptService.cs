@@ -53,17 +53,12 @@ namespace StoryPromptAPI.Services
                     Id = prompt.Id,
                     PromptContent = prompt.PromptContent,
                     PromptDateCreated = prompt.PromptDateCreated,
-
-                    UserId = prompt.UserId,
-                    
-
                     user = new UserDTO
                     {
                         Email = prompt.User.Email,
                         Id = prompt.User.Id,
                         UserName = prompt.User.UserName
                     }
-
                 });
             }
 
@@ -130,10 +125,6 @@ namespace StoryPromptAPI.Services
                 Id = prompt.Id,
                 PromptContent = prompt.PromptContent,
                 PromptDateCreated = prompt.PromptDateCreated,
-
-               
-
-
                 ReactionCount = (prompt.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (prompt.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
                 StoryCount = prompt.Stories.Count(),
                 user = new UserDTO
@@ -142,20 +133,7 @@ namespace StoryPromptAPI.Services
                     Id= prompt.UserId,
                     UserName = prompt.User.UserName
                 }
-
             };
-        }
-
-        public async Task<List<PromptDTO>> GetPromptsByUserIdAsync(string userId)
-        {
-            var prompts = await _promptRepository.GetPromptsByUserIdAsync(userId);
-            return prompts.Select(p => new PromptDTO
-            {
-                Id = p.Id,
-                PromptContent = p.PromptContent,
-                PromptDateCreated = p.PromptDateCreated,
-                UserId = p.UserId
-            }).ToList();
         }
 
         public async Task UpdatePromptAsync(UpdatePromptDTO updatePromptDto)

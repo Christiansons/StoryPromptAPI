@@ -1,5 +1,4 @@
-﻿using StoryPromptAPI.Models;
-using StoryPromptAPI.Models.DTOs.PromptReactions;
+﻿using StoryPromptAPI.Models.DTOs.PromptReactions;
 
 namespace StoryPromptAPI.Services.IServices
 {
@@ -10,6 +9,6 @@ namespace StoryPromptAPI.Services.IServices
         Task<PromptReactionsDTO> GetReactionByIdAsync(int id);
         Task<PromptReactionsDTO> AddReactionAsync(CreatePromptReactionsDTO createPromptReactionDto);
         Task UpdateReactionAsync(UpdatePromptReactionsDTO updatePromptReactionDto);
-        Task DeleteReactionAsync(PromptReactions reaction);
+        Task DeleteReactionAsync(int id);
     }
 }
