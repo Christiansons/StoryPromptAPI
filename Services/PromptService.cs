@@ -48,7 +48,9 @@ namespace StoryPromptAPI.Services
                 {
                     Id = prompt.Id,
                     PromptContent = prompt.PromptContent,
-                    PromptDateCreated = prompt.PromptDateCreated
+                    PromptDateCreated = prompt.PromptDateCreated,
+                    UserId = prompt.UserId,
+                    
                 });
             }
 
@@ -68,8 +70,22 @@ namespace StoryPromptAPI.Services
             {
                 Id = prompt.Id,
                 PromptContent = prompt.PromptContent,
-                PromptDateCreated = prompt.PromptDateCreated
+                PromptDateCreated = prompt.PromptDateCreated,
+                UserId = prompt.UserId
+
             };
+        }
+
+        public async Task<List<PromptDTO>> GetPromptsByUserIdAsync(string userId)
+        {
+            var prompts = await _promptRepository.GetPromptsByUserIdAsync(userId);
+            return prompts.Select(p => new PromptDTO
+            {
+                Id = p.Id,
+                PromptContent = p.PromptContent,
+                PromptDateCreated = p.PromptDateCreated,
+                UserId = p.UserId
+            }).ToList();
         }
 
         public async Task UpdatePromptAsync(UpdatePromptDTO updatePromptDto)

@@ -58,6 +58,24 @@ namespace StoryPromptAPI.Services
             return storyDTOs;
         }
 
+        public async Task<IEnumerable<StoryDTO>> GetStoriesByPromptIdAsync(int promptId)
+        {
+            var stories = await _storyRepository.GetStoriesByPromptIdAsync(promptId);
+            var StoriesDTOs = new List<StoryDTO>();
+            foreach (var story in stories)
+            {
+                StoriesDTOs.Add(new StoryDTO
+                {
+                    Id = story.Id,
+                    StoryContent = story.StoryContent,
+                    StoryDateCreated = story.StoryDateCreated,
+                    PromptId = story.PromptId,
+                    UserId = story.UserId,
+                });
+            }
+            return StoriesDTOs;
+        }
+
         public async Task<StoryDTO> GetStoryByIdAsync(int id)
         {
             var story = await _storyRepository.GetStoryByIdAsync(id);
@@ -86,6 +104,21 @@ namespace StoryPromptAPI.Services
 
             story.StoryContent = updateStoryDto.StoryContent;
             await _storyRepository.UpdateStoryAsync(story);
+        }
+
+
+
+        public async Task<List<StoryDTO>> GetStoriesByUserIdAsync(string userId)
+        {
+            var stories = await _storyRepository.GetStoriesByUserIdAsync(userId);
+            return stories.Select(s => new StoryDTO
+            {
+                Id = s.Id,
+                StoryContent = s.StoryContent,
+                StoryDateCreated = s.StoryDateCreated,
+                PromptId = s.PromptId,
+                UserId = s.UserId
+            }).ToList();
         }
     }
 }

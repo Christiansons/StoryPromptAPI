@@ -35,6 +35,21 @@ namespace StoryPromptAPI.Data.Repository
             return await _context.Stories.ToListAsync();
         }
 
+        public async Task<IEnumerable<Story>> GetStoriesByPromptIdAsync(int promptId)
+        {
+            return await _context.Stories
+                                 .Where(story => story.PromptId == promptId)
+                                 .ToListAsync();
+        }
+
+        public async Task<List<Story>> GetStoriesByUserIdAsync(string userId)
+        {
+            return await _context.Stories
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.StoryDateCreated)
+                .ToListAsync();
+        }
+
         public async Task<Story> GetStoryByIdAsync(int id)
         {
             var story = await _context.Stories.FirstOrDefaultAsync(s => s.Id == id);
