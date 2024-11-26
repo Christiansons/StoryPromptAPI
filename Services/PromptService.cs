@@ -1,6 +1,8 @@
 ﻿using StoryPromptAPI.Data.Repository.IRepository;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Models.DTOs.Prompt;
+using StoryPromptAPI.Models.DTOs.PromptReactions;
+using StoryPromptAPI.Models.DTOs.User;
 using StoryPromptAPI.Services.IServices;
 
 namespace StoryPromptAPI.Services
@@ -12,6 +14,8 @@ namespace StoryPromptAPI.Services
         {
             _promptRepository = promptRepository;
         }
+
+
         public async Task<PromptDTO> AddPromptAsync(CreatePromptDTO createPromptDto)
         {
             var prompt = new Prompt
@@ -49,13 +53,68 @@ namespace StoryPromptAPI.Services
                     Id = prompt.Id,
                     PromptContent = prompt.PromptContent,
                     PromptDateCreated = prompt.PromptDateCreated,
+
                     UserId = prompt.UserId,
                     
+
+                    user = new UserDTO
+                    {
+                        Email = prompt.User.Email,
+                        Id = prompt.User.Id,
+                        UserName = prompt.User.UserName
+                    }
+
                 });
             }
 
             return promptDTOs;
         }
+
+        //Get prompts ordered by created date
+		public async Task<IEnumerable<PromptDTO>> GetNewPromptsAsync()
+		{
+            var allPrompts = await _promptRepository.GetAllPromptsASync();
+            var newPrompts = allPrompts.Select(p => new PromptDTO
+            {
+                Id = p.Id,
+                PromptContent = p.PromptContent,
+                PromptDateCreated= p.PromptDateCreated,
+                user = new UserDTO
+                {
+                    Email = p.User.Email,
+                    Id = p.UserId,
+                    UserName = p.User.UserName
+                },
+                ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+                StoryCount = p.Stories.Count()
+            }).OrderBy(Dto => Dto.PromptDateCreated)
+            .ToList();
+
+            return newPrompts;
+		}
+
+        //get prompts ordered by like-count
+		public async Task<IEnumerable<PromptDTO>> GetTopPromptsAsync()
+		{
+			var allPrompts = await _promptRepository.GetAllPromptsASync();
+			var topPrompts = allPrompts.Select(p => new PromptDTO
+			{
+				PromptContent = p.PromptContent,
+				PromptDateCreated = p.PromptDateCreated,
+				Id = p.Id,
+				ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+				user = new UserDTO
+				{
+					Email = p.User.Email,
+					Id = p.UserId,
+					UserName = p.User.UserName,
+				},
+                StoryCount = p.Stories.Count()
+            }).OrderByDescending(Dto => Dto.ReactionCount)
+			.ToList();
+
+			return topPrompts;
+		}
 
         public async Task<PromptDTO> GetPromptByIdAsync(int id)
         {
@@ -71,7 +130,18 @@ namespace StoryPromptAPI.Services
                 Id = prompt.Id,
                 PromptContent = prompt.PromptContent,
                 PromptDateCreated = prompt.PromptDateCreated,
-                UserId = prompt.UserId
+
+               
+
+
+                ReactionCount = (prompt.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (prompt.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+                StoryCount = prompt.Stories.Count(),
+                user = new UserDTO
+                {
+                    Email = prompt.User.Email,
+                    Id= prompt.UserId,
+                    UserName = prompt.User.UserName
+                }
 
             };
         }

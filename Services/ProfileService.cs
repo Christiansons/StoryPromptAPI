@@ -38,6 +38,34 @@ namespace StoryPromptAPI.Services
             await _profileRepository.DeleteProfileAsync(id);
         }
 
+        public async Task<IEnumerable<ProfileDTO>> GetAllProfiles()
+        {
+            var profiles = await _profileRepository.GetAllProfiles();
+            // var profilesDTO = new List<ProfileDTO>();
+
+            // foreach (var profile in profiles)
+            // {
+            //     reactionDTOs.Add(new PromptReactionsDTO
+            //     {
+            //         Id = reaction.Id,
+            //         Reaction = reaction.Reaction,
+            //         PromptId = reaction.PromptId,
+            //         UserId = reaction.UserId
+            //     });
+            // }
+
+            // return reactionDTOs;
+            
+           return profiles.Select(p => new ProfileDTO
+            {
+                Description = p.Description,
+                Picture = p.Picture,
+                UserId = p.UserId,
+                Id = p.Id,
+            }).ToList();
+
+            
+        }
 
         public async Task<ProfileDTO> GetProfileByUserIdAsync(string userId)
         {
@@ -56,6 +84,8 @@ namespace StoryPromptAPI.Services
                 UserId = profile.UserId,
             };
         }
+
+  
 
         public async Task UpdateProfileAsync(UpdateProfileDTO updateProfileDto)
         {

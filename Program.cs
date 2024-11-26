@@ -66,6 +66,16 @@ namespace StoryPromptAPI
                 });
             builder.Services.AddAuthorization();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -96,12 +106,13 @@ namespace StoryPromptAPI
                 await CreateRoles(services); // Call the CreateRoles method here
             }
 
+            app.UseCors("AllowAll");
+
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            
+            app.UseSwagger();
+            app.UseSwaggerUI();
+           
 
             app.UseHttpsRedirection();
             app.UseCors("AllowSpecificOrigin");

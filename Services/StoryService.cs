@@ -2,6 +2,8 @@
 using StoryPromptAPI.Models.DTOs.Story;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Services.IServices;
+using StoryPromptAPI.Models.DTOs.Prompt;
+using StoryPromptAPI.Models.DTOs.User;
 
 namespace StoryPromptAPI.Services
 {
@@ -58,22 +60,31 @@ namespace StoryPromptAPI.Services
             return storyDTOs;
         }
 
-        public async Task<IEnumerable<StoryDTO>> GetStoriesByPromptIdAsync(int promptId)
+
+       
+
+        public async Task<IEnumerable<StoryByPromptDTO>> GetAllStoriesForPromptAsync(int promptId)
         {
-            var stories = await _storyRepository.GetStoriesByPromptIdAsync(promptId);
-            var StoriesDTOs = new List<StoryDTO>();
-            foreach (var story in stories)
+            var allStories = await _storyRepository.GetAllStoriesAsync();
+
+            var storiesForPrompt = allStories
+                .Where(s => s.PromptId == promptId)
+                .Select(s => new StoryByPromptDTO
             {
-                StoriesDTOs.Add(new StoryDTO
+                StoryContent = s.StoryContent,
+                StoryDateCreated = s.StoryDateCreated,
+                ReactionCount = s.StoriesReactions.Where(p => p.Reaction == "Like").Count() - s.StoriesReactions.Where(s => s.Reaction == "Dislike").Count(),
+                Id = s.Id,
+                user = new UserDTO
                 {
-                    Id = story.Id,
-                    StoryContent = story.StoryContent,
-                    StoryDateCreated = story.StoryDateCreated,
-                    PromptId = story.PromptId,
-                    UserId = story.UserId,
-                });
-            }
-            return StoriesDTOs;
+                    Email = s.User.Email,
+                    Id = s.UserId,
+                    UserName = s.User.UserName,
+                },
+            }).ToList();
+            
+            return storiesForPrompt;
+
         }
 
         public async Task<StoryDTO> GetStoryByIdAsync(int id)

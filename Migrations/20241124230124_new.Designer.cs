@@ -12,8 +12,8 @@ using StoryPromptAPI.Data;
 namespace StoryPromptAPI.Migrations
 {
     [DbContext(typeof(StoryPromptContext))]
-    [Migration("20241031191219_Init")]
-    partial class Init
+    [Migration("20241124230124_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -430,7 +430,7 @@ namespace StoryPromptAPI.Migrations
             modelBuilder.Entity("StoryPromptAPI.Models.Prompt", b =>
                 {
                     b.HasOne("StoryPromptAPI.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Prompts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -509,6 +509,8 @@ namespace StoryPromptAPI.Migrations
                 {
                     b.Navigation("Profile")
                         .IsRequired();
+
+                    b.Navigation("Prompts");
 
                     b.Navigation("PromptsReactions");
 

@@ -14,7 +14,6 @@ namespace StoryPromptAPI.Models
 
         public User User { get; set; }
 
-
         public int PromptId { get; set; }
 
         public Prompt Prompt { get; set; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StoryPromptAPI.Models.DTOs.Profile;
 using StoryPromptAPI.Services.IServices;
+using System.Security.Claims;
 
 namespace StoryPromptAPI.Controllers
 {
@@ -16,16 +17,40 @@ namespace StoryPromptAPI.Controllers
             _profileService = profileService;
         }
 
+        // GET: api/profiles
+        [HttpGet]
+        public async Task<IActionResult> GetAllProfiles()
+        {
+            var profiles = await _profileService.GetAllProfiles();
+            return Ok(profiles);
+        }
+
         // GET: api/profile/user/{userId}
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetProfileByUserId(string userId)
+        public async Task<IActionResult> GetProfileByUserId(string? userId = null)
         {
-            var profile = await _profileService.GetProfileByUserIdAsync(userId);
+            //Get the users Id from JWT token
+            var loggedInUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            //Use UserId from argument if not null, else use Id from token
+            var targetUserId = userId ?? loggedInUserId;
+
+            var profile = await _profileService.GetProfileByUserIdAsync(targetUserId);
             if (profile == null)
             {
                 return NotFound("Profile not found.");
             }
-            return Ok(profile);
+
+            var idProfile = new ProfileByIdDTO
+            {
+                Id = profile.Id,
+                Description = profile.Description,
+                Picture = profile.Picture,
+                ProfileCreated = profile.ProfileCreated,
+                UserId = profile.UserId,
+                IsOwnProfile = targetUserId == loggedInUserId //Checks if the logged in user is visiting their own profile
+            };
+            return Ok(idProfile);
         }
 
         // POST: api/profile

@@ -7,6 +7,5 @@
         public DateTime StoryDateCreated { get; set; }
         public int PromptId { get; set; }
         public string UserId { get; set; }
-
     }
 }

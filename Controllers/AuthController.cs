@@ -134,7 +134,11 @@ namespace StoryPromptAPI.Controllers
             // Define the token descriptor
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+
                 Subject = new ClaimsIdentity(claims),
+
+              
+
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
                 Issuer = _jwtSettings.Issuer,
                 Audience = _jwtSettings.Audience,

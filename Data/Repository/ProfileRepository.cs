@@ -28,6 +28,11 @@ namespace StoryPromptAPI.Data.Repository
             }
         }
 
+        public async Task<IEnumerable<Profile>> GetAllProfiles()
+        {
+            return await _context.Profiles.ToListAsync();
+        }
+
         public async Task<Profile> GetProfileByUserIdAsync(string userId)
         {
             var user = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
