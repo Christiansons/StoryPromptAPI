@@ -14,6 +14,5 @@ namespace StoryPromptAPI.Models.DTOs.Prompt
         public UserDTO user { get; set; }
         public int ReactionCount { get; set; }
         public int StoryCount   { get; set; }
-
     }
 }

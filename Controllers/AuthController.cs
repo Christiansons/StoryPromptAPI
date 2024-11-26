@@ -20,10 +20,12 @@ namespace StoryPromptAPI.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly JwtSettings _jwtSettings;
 
+        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IOptions<JwtSettings> jwtSettings)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtSettings = jwtSettings.Value;
+            
         }
 
         [HttpPost("Register")]
@@ -64,16 +66,24 @@ namespace StoryPromptAPI.Controllers
                 return Unauthorized("Invalid credentials");
             }
 
+            var token = GenerateJwtToken(user);
 
             return Ok(new { token });
         }
 
+        private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.UserName)
+                }),
                 Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes),
                 Issuer = _jwtSettings.Issuer,
                 Audience = _jwtSettings.Audience,
