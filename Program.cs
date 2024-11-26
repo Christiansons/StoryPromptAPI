@@ -31,7 +31,7 @@ namespace StoryPromptAPI
             var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
             builder.Services.Configure<JwtSettings>(jwtSettingsSection);
 
-            
+
 
             builder.Services.AddAuthentication(options =>
             {
@@ -66,7 +66,7 @@ namespace StoryPromptAPI
             // Add services to the container.
 
             builder.Services.AddControllers();
-            
+
             builder.Services.AddScoped<IPromptRepository, PromptRepository>();
             builder.Services.AddScoped<IStoryRepository, StoryRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -91,10 +91,10 @@ namespace StoryPromptAPI
             app.UseCors("AllowAll");
 
             // Configure the HTTP request pipeline.
-            
+
             app.UseSwagger();
             app.UseSwaggerUI();
-           
+
 
             app.UseHttpsRedirection();
             app.UseAuthentication();
