@@ -14,8 +14,6 @@ namespace StoryPromptAPI.Data.Repository.IRepository
 <<<<<<< HEAD
         
 
-=======
         Task<bool> CheckExisitingUpvote(PromptReactions reaction);
->>>>>>> parent of a369e5b (Merge branch 'master' into Alex)
     }
 }

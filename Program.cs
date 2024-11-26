@@ -17,6 +17,9 @@ namespace StoryPromptAPI
     {
 <<<<<<< HEAD
         public static void Main(string[] args)
+=======
+        public static async Task Main(string[] args)
+>>>>>>> parent of 8c23729 (rt)
         {
             var builder = WebApplication.CreateBuilder(args);
 

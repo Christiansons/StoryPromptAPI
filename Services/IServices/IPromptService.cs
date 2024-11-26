@@ -11,8 +11,10 @@ namespace StoryPromptAPI.Services.IServices
         Task DeletePromptAsync(int id);
 <<<<<<< HEAD
 		Task<IEnumerable<PromptDTO>> GetTopPromptsAsync();
+=======
 
         Task<List<PromptDTO>> GetPromptsByUserIdAsync(string userId);
+>>>>>>> parent of 8c23729 (rt)
 		Task<IEnumerable<PromptDTO>> GetNewPromptsAsync();
     
 
