@@ -10,5 +10,7 @@ namespace StoryPromptAPI.Services.IServices
         Task<StoryDTO> AddStoryAsync(CreateStoryDTO createStoryDto);
         Task UpdateStoryAsync(UpdateStoryDTO updateStoryDto);
         Task DeleteStoryAsync(int id);
+        Task<List<StoryDTO>> GetStoriesByUserIdAsync(string userId);
+
     }
 }
