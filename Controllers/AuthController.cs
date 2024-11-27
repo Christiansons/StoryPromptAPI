@@ -91,8 +91,6 @@ namespace StoryPromptAPI.Controllers
             return Ok(new { token });
         }
 
-
-
         [HttpPost("PromoteToAdmin/{userId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PromoteToAdmin(string userId)
