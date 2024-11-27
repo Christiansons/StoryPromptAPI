@@ -73,7 +73,7 @@ namespace StoryPromptAPI.Services
             {
                 StoryContent = s.StoryContent,
                 StoryDateCreated = s.StoryDateCreated,
-                ReactionCount = s.StoriesReactions.Where(p => p.Reaction == "Like").Count() - s.StoriesReactions.Where(s => s.Reaction == "Dislike").Count(),
+                ReactionCount = s.StoriesReactions.Where(p => p.Reaction == "Upvote").Count() - s.StoriesReactions.Where(s => s.Reaction == "Downvote").Count(),
                 Id = s.Id,
                 user = new UserDTO
                 {

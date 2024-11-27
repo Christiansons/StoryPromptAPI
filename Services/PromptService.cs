@@ -85,7 +85,7 @@ namespace StoryPromptAPI.Services
                     Id = p.UserId,
                     UserName = p.User.UserName
                 },
-                ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+                ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Upvote").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Downvote").Count()),
                 StoryCount = p.Stories.Count()
             }).OrderBy(Dto => Dto.PromptDateCreated)
             .ToList();
@@ -102,7 +102,7 @@ namespace StoryPromptAPI.Services
 				PromptContent = p.PromptContent,
 				PromptDateCreated = p.PromptDateCreated,
 				Id = p.Id,
-				ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+				ReactionCount = (p.PromptsReactions.Where(p => p.Reaction == "Upvote").Count()) - (p.PromptsReactions.Where(p => p.Reaction == "Downvote").Count()),
 				user = new UserDTO
 				{
 					Email = p.User.Email,
@@ -134,7 +134,7 @@ namespace StoryPromptAPI.Services
                
 
 
-                ReactionCount = (prompt.PromptsReactions.Where(p => p.Reaction == "Like").Count()) - (prompt.PromptsReactions.Where(p => p.Reaction == "Dislike").Count()),
+                ReactionCount = (prompt.PromptsReactions.Where(p => p.Reaction == "Upvote").Count()) - (prompt.PromptsReactions.Where(p => p.Reaction == "Downvote").Count()),
                 StoryCount = prompt.Stories.Count(),
                 user = new UserDTO
                 {
