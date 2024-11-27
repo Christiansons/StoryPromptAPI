@@ -10,6 +10,7 @@ namespace StoryPromptAPI.Services.IServices
         Task<PromptReactionsDTO> GetReactionByIdAsync(int id);
         Task<PromptReactionsDTO> AddReactionAsync(CreatePromptReactionsDTO createPromptReactionDto);
         Task UpdateReactionAsync(UpdatePromptReactionsDTO updatePromptReactionDto);
-        Task DeleteReactionAsync(PromptReactions reaction);
+        Task DeleteReactionAsync(PromptReactionsDTO reaction);
+        Task<PromptReactionsDTO?> GetReactionAsync(string userId, int promptId);
     }
 }

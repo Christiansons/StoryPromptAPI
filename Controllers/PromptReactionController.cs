@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StoryPromptAPI.Models;
 using StoryPromptAPI.Models.DTOs.PromptReactions;
 using StoryPromptAPI.Services.IServices;
@@ -35,19 +36,77 @@ namespace StoryPromptAPI.Controllers
 
         // POST: api/promptreaction
         [HttpPost]
-        public async Task<IActionResult> AddReaction(CreatePromptReactionsDTO createPromptReactionDto)
+        public async Task<IActionResult> AddReaction([FromBody]CreatePromptReactionsDTO reactionDto)
         {
-            if (!ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                // Find any existing reaction for this user and prompt
+                
+                PromptReactionsDTO? existingReaction = await _promptReactionService.GetReactionAsync(reactionDto.userId, reactionDto.promptId);
+
+                if (existingReaction != null)
+                {
+                    if (existingReaction.Reaction == "Upvote")
+                    {
+                        if (reactionDto.reaction == "Upvote")
+                        {
+                            // User pressed Upvote again; remove the reaction
+                            await _promptReactionService.DeleteReactionAsync(existingReaction);
+                        }
+                        else if (reactionDto.reaction == "Downvote")
+                        {
+                            // User pressed Downvote; switch reaction
+                            existingReaction.Reaction = "Downvote";
+                            await _promptReactionService.UpdateReactionAsync(new UpdatePromptReactionsDTO
+                            {
+                                Id = existingReaction.Id,
+                                Reaction = reactionDto.reaction,
+                            });
+                        }
+                    }
+                    else if (existingReaction.Reaction == "Downvote")
+                    {
+                        if (reactionDto.reaction == "Downvote")
+                        {
+                            // User pressed Downvote again; remove the reaction
+                            await _promptReactionService.DeleteReactionAsync(existingReaction);
+                        }
+                        else if (reactionDto.reaction == "Upvote")
+                        {
+                            // User pressed Upvote; switch reaction
+                            existingReaction.Reaction = "Upvote";
+                            await _promptReactionService.UpdateReactionAsync(new UpdatePromptReactionsDTO
+                            {
+                                Id = existingReaction.Id,
+                                Reaction = reactionDto.reaction,
+                            });
+                        }
+                    }
+                }
+                else
+                {
+                    // No existing reaction; add new reaction
+                    var newReaction = new CreatePromptReactionsDTO
+                    {
+                        reaction = reactionDto.reaction,
+                        userId = reactionDto.userId,
+                        promptId = reactionDto.promptId
+                    };
+
+                    await _promptReactionService.AddReactionAsync(newReaction);
+                }
+                return Ok();
+                
             }
 
-            var createdReaction = await _promptReactionService.AddReactionAsync(createPromptReactionDto);
-            return CreatedAtAction(nameof(GetReactionsByPrompt), new { promptId = createdReaction.PromptId }, createdReaction);
+            return BadRequest("Invalid reaction data");
         }
 
-        // PUT: api/promptreaction/{id}
-        [HttpPut("{id}")]
+    
+
+    // PUT: api/promptreaction/{id}
+    [HttpPut("{id}")]
         public async Task<IActionResult> UpdateReaction(int id, UpdatePromptReactionsDTO updatePromptReactionDto)
         {
             if (id != updatePromptReactionDto.Id)
@@ -66,7 +125,7 @@ namespace StoryPromptAPI.Controllers
 
         // DELETE: api/promptreaction/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReaction(PromptReactions reaction)
+        public async Task<IActionResult> DeleteReaction(PromptReactionsDTO reaction)
         {
             await _promptReactionService.DeleteReactionAsync(reaction);
             return NoContent();

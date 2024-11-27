@@ -25,7 +25,7 @@ namespace StoryPromptAPI.Data.Repository
 
         public async Task DeleteReactionAsync(PromptReactions reaction)
         {
-            var foundReaction = await _context.PromptsReactions.FindAsync(reaction);
+            var foundReaction = await _context.PromptsReactions.FindAsync(reaction.Id);
             if (foundReaction != null)
             {
                 _context.PromptsReactions.Remove(reaction);
