@@ -32,7 +32,9 @@ namespace StoryPromptAPI
             {
                 options.AddPolicy("AllowSpecificOrigin", builder =>
                 {
-                    builder.WithOrigins("https://localhost:7073") // Replace with MVC app URLs
+                    builder.WithOrigins("https://localhost:7073")
+                            .WithOrigins("https://localhost:7258")// Replace with MVC app URLs
+                            .WithOrigins("https://localhost:7018")
                            .AllowAnyHeader()
                            .AllowAnyMethod()
                            .AllowCredentials(); // Needed for cookie-based authentication
