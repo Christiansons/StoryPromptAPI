@@ -16,9 +16,9 @@ namespace StoryPromptAPI.Services
         {
             var reaction = new PromptReactions
             {
-                Reaction = createPromptReactionDto.Reaction,
-                PromptId = createPromptReactionDto.PromptId,
-                UserId = createPromptReactionDto.UserId
+                Reaction = createPromptReactionDto.reaction,
+                PromptId = createPromptReactionDto.promptId,
+                UserId = createPromptReactionDto.userId
             };
 
             await _promptReactionRepository.AddReactionAsync(reaction);
@@ -32,9 +32,10 @@ namespace StoryPromptAPI.Services
             };
         }
 
-        public async Task DeleteReactionAsync(int id)
+        public async Task DeleteReactionAsync(PromptReactionsDTO reaction)
         {
-            await _promptReactionRepository.DeleteReactionAsync(id);
+            var foundReaction = await _promptReactionRepository.GetReactionByIdAsync(reaction.Id);
+            await _promptReactionRepository.DeleteReactionAsync(foundReaction);
         }
 
         public async Task<IEnumerable<PromptReactionsDTO>> GetAllReactionsByPromptIdAsync(int promptId)
@@ -74,6 +75,28 @@ namespace StoryPromptAPI.Services
 
             return reactionDTOs;
 
+        }
+
+        public async Task<PromptReactionsDTO?> GetReactionAsync(string userId, int promptId)
+        {
+            var reaction = await _promptReactionRepository.GetReactionByPromptAndUserAsync(promptId, userId);
+            try
+            {
+                var reactionToSend = new PromptReactionsDTO
+                {
+                    Id = reaction.Id,
+                    Reaction = reaction.Reaction,
+                    PromptId = reaction.PromptId,
+                    UserId = reaction.UserId
+                };
+
+                return reactionToSend;
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
 
         public async Task<PromptReactionsDTO> GetReactionByIdAsync(int id)

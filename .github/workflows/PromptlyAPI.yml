@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Web App PromptlyAPI
 on:
   push:
     branches:
-    - Alex
+    - master
 env:
   AZURE_WEBAPP_NAME: PromptlyAPI
   AZURE_WEBAPP_PACKAGE_PATH: .\publish

@@ -9,5 +9,7 @@ namespace StoryPromptAPI.Data.Repository.IRepository
         Task AddStoryAsync(Story story);
         Task UpdateStoryAsync(Story story);
         Task DeleteStoryAsync(int id);
+        Task<IEnumerable<Story>> GetStoriesByPromptIdAsync(int promptId);
+        Task<List<Story>> GetStoriesByUserIdAsync(string userId);
     }
 }

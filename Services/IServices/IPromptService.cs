@@ -10,6 +10,8 @@ namespace StoryPromptAPI.Services.IServices
         Task UpdatePromptAsync(UpdatePromptDTO updatePromptDto);
         Task DeletePromptAsync(int id);
 		Task<IEnumerable<PromptDTO>> GetTopPromptsAsync();
+        Task<List<PromptDTO>> GetPromptsByUserIdAsync(string userId);
 		Task<IEnumerable<PromptDTO>> GetNewPromptsAsync();
 	}
+
 }
